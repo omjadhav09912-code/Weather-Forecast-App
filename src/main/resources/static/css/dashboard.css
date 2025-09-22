@@ -1,0 +1,150 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.material-header, .main-header {
+  padding: 16px 0;
+  box-shadow: 0 2px 8px rgba(60,64,67,.15);
+}
+
+.material-header .logo {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-left: 16px;
+}
+
+.material-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(60,64,67,.15);
+  background: #fff;
+}
+
+.material-btn {
+  border-radius: 24px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(60,64,67,.15);
+  transition: background 0.2s;
+}
+.material-btn:hover {
+  background: #1565c0 !important;
+  color: #fff !important;
+}
+
+.weather-header {
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav-tabs .nav-link {
+  font-weight: 500;
+  border-radius: 24px 24px 0 0;
+}
+
+.material-footer, .main-footer {
+  background: #fff;
+  color: #333;
+  padding: 16px 0;
+  text-align: center;
+  box-shadow: 0 -2px 8px rgba(60,64,67,.15);
+  font-size: 1rem;
+  width: 100%;
+  position: relative;
+}
+.material-footer a, .main-footer a {
+  color: #333;
+  text-decoration: none;
+  margin: 0 8px;
+  font-weight: 500;
+}
+.material-footer a:hover, .main-footer a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 20px 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+  text-align: center;
+  color: #0d6efd;
+  margin-bottom: 20px;
+}
+
+.search-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.search-section input[type="text"] {
+  flex: 1 1 200px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.search-section input[type="text"]:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.4);
+}
+
+.search-section button {
+  padding: 10px 20px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.search-section button:hover {
+  background: #0b5ed7;
+}
+
+.weather-block {
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+thead th {
+  background-color: #0d6efd;
+  color: white;
+  padding: 8px;
+}
+
+tbody td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+tbody tr:hover {
+  background-color: #e0efff;
+}

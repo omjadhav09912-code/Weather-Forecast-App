@@ -1,0 +1,79 @@
+/* General Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Logo Styling (minimal, for branding only) */
+.logo {
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Footer Styling */
+.material-footer, .main-footer {
+    background: #1976d2;
+    color: #fff;
+    padding: 16px 0;
+    text-align: center;
+    box-shadow: 0 -2px 8px rgba(60,64,67,.15);
+    font-size: 1rem;
+}
+
+.material-footer a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 8px;
+    font-weight: 500;
+}
+
+.material-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Card Styling */
+.material-card {
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(60,64,67,.15);
+    background: #fff;
+}
+
+/* Button Styling */
+.material-btn {
+    border-radius: 24px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(60,64,67,.15);
+    transition: background 0.2s;
+}
+
+.material-btn:hover {
+    background: #1565c0 !important;
+    color: #fff !important;
+}
+
+/* Form Inputs */
+.form-label {
+    font-weight: 500;
+}
+
+/* Register Link */
+.register-link {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 576px) {
+    .logo {
+        margin-bottom: 10px;
+    }
+}

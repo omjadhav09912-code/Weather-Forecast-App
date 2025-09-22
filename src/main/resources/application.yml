@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: Weather-App
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/Weather-App?createDatabaseIfNotExist=true
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+openweathermap:
+  api:
+    key: 95998fadc10e994c3b4c5e1f259ae145
+    geo:
+      url: https://api.openweathermap.org/geo/1.0/direct
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
