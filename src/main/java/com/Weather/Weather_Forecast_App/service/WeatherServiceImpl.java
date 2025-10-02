@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.Weather.Weather_Forecast_App.model.CurrentWeather;
@@ -17,6 +18,7 @@ import com.Weather.Weather_Forecast_App.model.WeeklyWeatherResponse;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
+    @Override
     public String getApiKey() {
         return apiKey;
     }
@@ -27,7 +29,7 @@ public class WeatherServiceImpl implements WeatherService {
 
     private static final String API_URL_BY_CITY = "https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
 
-    private static final String API_URL_WEEKLY = "https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={apiKey}&units=metric";
+   // private static final String API_URL_WEEKLY = "https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={apiKey}&units=metric";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -58,7 +60,7 @@ public class WeatherServiceImpl implements WeatherService {
                 }
             }
             return weatherData;
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             logger.error("Error fetching weather data for city: {}", city, e);
             return null;
         }
@@ -89,7 +91,7 @@ public class WeatherServiceImpl implements WeatherService {
                 }
             }
             return weatherData;
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             logger.error("Error fetching weather data for coordinates: lat={}, lon={}", lat, lon, e);
             return null;
         }
