@@ -1,158 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
     <style>
-        body { font-family: 'Roboto', sans-serif; background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 100%); }
-        .dashboard-header { font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 1.5rem; color: #1976d2; }
-        .dashboard-section { margin-bottom: 2rem; }
-        .material-card { border-radius: 18px; box-shadow: 0 4px 24px rgba(60,64,67,.18); background: #fff; }
-        .material-btn { border-radius: 24px; font-weight: 500; box-shadow: 0 2px 8px rgba(60,64,67,.15); transition: background 0.2s; }
-        .material-btn:hover { background: #1565c0 !important; color: #fff !important; }
-        .weather-icon { width: 64px; height: 64px; }
-        .weather-data { font-size: 1.3rem; font-weight: 500; color: #1976d2; }
-        .weather-label { font-size: 1rem; color: #333; }
-        .nav-tabs .nav-link { font-weight: 500; border-radius: 24px 24px 0 0; background: #e3f2fd; margin-right: 8px; }
-        .nav-tabs .nav-link.active { background: #1976d2; color: #fff; }
-        @media (max-width: 768px) {
-            .dashboard-header { font-size: 1.5rem; }
-            .weather-data { font-size: 1.1rem; }
-        }
+
     </style>
 </head>
 <body>
-    <div th:replace="~{fragments/header :: header}"></div>
-    <div class="container py-4">
-        <div class="dashboard-header d-flex align-items-center justify-content-between dashboard-section">
-            <span><span class="material-icons me-2">cloud</span>Weather Dashboard</span>
-            <a href="/logout" class="btn btn-outline-danger material-btn"><span class="material-icons">logout</span> Logout</a>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm rounded">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/weather/dashboard}">
+            <span class="material-icons me-2">cloud</span>
+            <span class="logo" style="font-weight: 500;">WeatherApp</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item d-flex align-items-center" th:if="${session.user != null}">
+                    <span class="nav-link">Welcome, <span th:text="${session.user}"></span></span>
+                    <a class="nav-link" th:href="@{/logout}"><span class="material-icons">logout</span> Logout</a>
+                </li>
+            </ul>
         </div>
-        <ul class="nav nav-tabs mb-4" id="weatherTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="location-tab" data-bs-toggle="tab" data-bs-target="#location" type="button" role="tab"><span class="material-icons">my_location</span> Current Location</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab"><span class="material-icons">search</span> Search by City</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab"><span class="material-icons">calendar_today</span> Weekly Forecast</button>
-            </li>
-        </ul>
-        <div class="tab-content" id="weatherTabsContent">
-            <div class="tab-pane fade show active" id="location" role="tabpanel">
-                <form th:action="@{/weather/dashboard}" method="get" class="mb-3">
-                    <input type="hidden" name="useLocation" value="true" />
-                    <button type="submit" class="btn btn-info material-btn"><span class="material-icons">location_on</span> Show My Location Weather</button>
-                </form>
-                <div th:if="${weather != null && useLocation}">
-                    <div class="material-card p-4 mb-3">
-                        <div class="row align-items-center">
-                            <div class="col-md-4 text-center">
-                                <img th:if="${weather.current.icon != null}" th:src="@{'https://openweathermap.org/img/wn/' + ${weather.current.icon} + '@4x.png'}" alt="Weather Icon" class="weather-icon mb-2" />
-                                <div class="weather-data" th:text="${weather.current.temperature} + ' °C'"></div>
-                                <div class="weather-label">Temperature</div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Humidity</span><br>
-                                        <span class="weather-data" th:text="${weather.current.humidity} + '%' "></span>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Pressure</span><br>
-                                        <span class="weather-data" th:text="${weather.current.pressure}"></span> hPa
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Wind</span><br>
-                                        <span class="weather-data" th:text="${weather.current.wind}"></span> km/h
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Description</span><br>
-                                        <span class="weather-data" th:text="${weather.current.description}"></span>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Sunrise</span><br>
-                                        <span class="weather-data" th:text="${weather.current.sunrise}"></span>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Sunset</span><br>
-                                        <span class="weather-data" th:text="${weather.current.sunset}"></span>
-                                    </div>
-                                </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="dashboard-header">
+        <span><span class="material-icons me-2">cloud</span>Weather Dashboard</span>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a id="currentLocationTab" class="nav-link" th:classappend="${useLocation} ? ' active' : ''"
+               data-bs-toggle="tab" href="#location">
+                <span class="material-icons">my_location</span> Current Location
+            </a>
+        </li>
+        <li class="nav-item">
+            <a id="searchCityTab" class="nav-link" th:classappend="${!useLocation} ? ' active' : ''"
+               data-bs-toggle="tab" href="#search">
+                <span class="material-icons">search</span> Search by City
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+
+        <!-- Current Location Section -->
+        <div class="tab-pane fade" id="location" th:classappend="${useLocation} ? ' show active' : ''">
+            <div th:if="${weatherLocation != null and weatherLocation.current != null}">
+                <div class="material-card p-4 mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center">
+                            <img th:if="${weatherLocation.current.icon != null}" th:src="@{'https://openweathermap.org/img/wn/' + ${weatherLocation.current.icon} + '@4x.png'}" class="weather-icon"/>
+                            <div class="weather-data" th:text="${weatherLocation.current.temperature} + ' °C'"></div>
+                            <div class="weather-label">Temperature</div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-6 mb-2"><span class="weather-label">Humidity</span><br><span class="weather-data" th:text="${weatherLocation.current.humidity} + '%'"></span></div>
+                                <div class="col-6 mb-2"><span class="weather-label">Pressure</span><br><span class="weather-data" th:text="${weatherLocation.current.pressure}"></span> hPa</div>
+                                <div class="col-6 mb-2"><span class="weather-label">Wind</span><br><span class="weather-data" th:text="${weatherLocation.current.wind}"></span> km/h</div>
+                                <div class="col-6 mb-2"><span class="weather-label">Description</span><br><span class="weather-data" th:text="${weatherLocation.current.description}"></span></div>
+                                <div class="col-6 mb-2"><span class="weather-label">Sunrise</span><br><span class="weather-data" th:text="${weatherLocation.current.sunrise}"></span></div>
+                                <div class="col-6 mb-2"><span class="weather-label">Sunset</span><br><span class="weather-data" th:text="${weatherLocation.current.sunset}"></span></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="search" role="tabpanel">
-                <form class="row g-3 mb-3" th:action="@{/weather/dashboard}" method="get">
-                    <div class="col-md-6">
-                        <input id="cityInput" type="text" name="city" class="form-control" placeholder="Enter city name" th:value="${searchedCity}" required />
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-check">
-                            <input id="weeklyToggle" type="checkbox" class="form-check-input" th:name="weekly" th:checked="${weekly}" />
-                            <label for="weeklyToggle" class="form-check-label">Show Weekly Forecast</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <button id="searchBtn" type="submit" class="btn btn-primary w-100 material-btn">Search</button>
-                    </div>
-                </form>
-                <div id="weatherInfo" th:if="${weather != null && !useLocation}">
-                    <div class="material-card p-4 mb-3">
-                        <div class="row align-items-center">
-                            <div class="col-md-4 text-center">
-                                <img th:if="${weather.current.icon != null}" th:src="@{'https://openweathermap.org/img/wn/' + ${weather.current.icon} + '@4x.png'}" alt="Weather Icon" class="weather-icon mb-2" />
-                                <div class="weather-data" th:text="${weather.current.temperature} + ' °C'"></div>
-                                <div class="weather-label">Temperature</div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Humidity</span><br>
-                                        <span class="weather-data" th:text="${weather.current.humidity} + '%' "></span>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Pressure</span><br>
-                                        <span class="weather-data" th:text="${weather.current.pressure}"></span> hPa
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Wind</span><br>
-                                        <span class="weather-data" th:text="${weather.current.wind}"></span> km/h
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Description</span><br>
-                                        <span class="weather-data" th:text="${weather.current.description}"></span>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Sunrise</span><br>
-                                        <span class="weather-data" th:text="${weather.current.sunrise}"></span>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <span class="weather-label">Sunset</span><br>
-                                        <span class="weather-data" th:text="${weather.current.sunset}"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="weekly" role="tabpanel">
-                <div th:if="${weather != null} and ${weather.weekly != null}">
+
+                <!-- Weekly forecast -->
+                <div th:if="${weatherLocation.weekly != null}">
                     <h4 class="mb-3">Weekly Forecast</h4>
                     <div class="row row-cols-1 row-cols-md-3 g-4">
-                        <div class="col" th:each="day : ${weather.weekly}">
+                        <div class="col" th:each="day : ${weatherLocation.weekly}">
                             <div class="material-card h-100 p-3">
                                 <div class="text-center mb-2">
-                                    <img th:if="${day.icon != null}" th:src="@{'https://openweathermap.org/img/wn/' + ${day.icon} + '@2x.png'}" alt="Weather Icon" class="weather-icon" />
+                                    <img th:if="${day.icon != null}" th:src="@{'https://openweathermap.org/img/wn/' + ${day.icon} + '@2x.png'}" class="weather-icon" />
                                 </div>
                                 <h5 class="card-title mb-2" th:text="${day.date}"></h5>
                                 <div class="weather-data mb-1"><span th:text="${day.min}"></span>°C - <span th:text="${day.max}"></span>°C</div>
@@ -162,15 +98,100 @@
                     </div>
                 </div>
             </div>
+            <div th:if="${weatherLocation == null}">
+                <div class="alert alert-warning mt-3" th:text="${errorMsgLocation != null} ? ${errorMsgLocation} : 'No weather data to display.'"></div>
+            </div>
         </div>
-        <div th:if="${errorMsg != null}">
-            <div class="alert alert-danger mt-3" th:text="${errorMsg}"></div>
+
+        <!-- Search by City Section -->
+        <div class="tab-pane fade" id="search" th:classappend="${!useLocation} ? ' show active' : ''">
+            <form th:action="@{/weather/dashboard}" method="get" class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <input type="text" name="city" class="form-control" placeholder="Enter city name" th:value="${searchedCity}" required/>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="weekly" th:checked="${weekly}"/>
+                        <label class="form-check-label">Show Weekly Forecast</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100 material-btn">Search</button>
+                </div>
+            </form>
+
+            <div th:if="${weatherCity != null and weatherCity.current != null}">
+                <div class="material-card p-4 mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center">
+                            <img th:if="${weatherCity.current.icon != null}" th:src="@{'https://openweathermap.org/img/wn/' + ${weatherCity.current.icon} + '@4x.png'}" class="weather-icon"/>
+                            <div class="weather-data" th:text="${weatherCity.current.temperature} + ' °C'"></div>
+                            <div class="weather-label">Temperature</div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-6 mb-2"><span class="weather-label">Humidity</span><br><span class="weather-data" th:text="${weatherCity.current.humidity} + '%'"></span></div>
+                                <div class="col-6 mb-2"><span class="weather-label">Pressure</span><br><span class="weather-data" th:text="${weatherCity.current.pressure}"></span> hPa</div>
+                                <div class="col-6 mb-2"><span class="weather-label">Wind</span><br><span class="weather-data" th:text="${weatherCity.current.wind}"></span> km/h</div>
+                                <div class="col-6 mb-2"><span class="weather-label">Description</span><br><span class="weather-data" th:text="${weatherCity.current.description}"></span></div>
+                                <div class="col-6 mb-2"><span class="weather-label">Sunrise</span><br><span class="weather-data" th:text="${weatherCity.current.sunrise}"></span></div>
+                                <div class="col-6 mb-2"><span class="weather-label">Sunset</span><br><span class="weather-data" th:text="${weatherCity.current.sunset}"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${weatherCity.weekly != null}">
+                    <h4 class="mb-3">Weekly Forecast</h4>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col" th:each="day : ${weatherCity.weekly}">
+                            <div class="material-card h-100 p-3">
+                                <div class="text-center mb-2">
+                                    <img th:if="${day.icon != null}" th:src="@{'https://openweathermap.org/img/wn/' + ${day.icon} + '@2x.png'}" class="weather-icon" />
+                                </div>
+                                <h5 class="card-title mb-2" th:text="${day.date}"></h5>
+                                <div class="weather-data mb-1"><span th:text="${day.min}"></span>°C - <span th:text="${day.max}"></span>°C</div>
+                                <div class="weather-label mb-2" th:text="${day.description}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${weatherCity == null}">
+                <div class="alert alert-warning mt-3" th:text="${errorMsgCity != null} ? ${errorMsgCity} : 'No weather data to display.'"></div>
+            </div>
         </div>
-        <div th:if="${weather == null} and ${errorMsg == null}">
-            <div class="alert alert-warning mt-3">No weather data to display. Please check your city name or try again later.</div>
-        </div>
+
     </div>
-    <div th:replace="~{fragments/footer :: footer}"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Correct tab behavior -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentLocationTab = document.getElementById("currentLocationTab");
+
+        currentLocationTab.addEventListener("click", function (e) {
+            e.preventDefault(); // prevent default tab toggle
+            if (!currentLocationTab.classList.contains("active")) {
+                // reload page with current location parameter
+                window.location.href = "/weather/dashboard?useLocation=true";
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentLocationTab = document.getElementById("currentLocationTab");
+
+        currentLocationTab.addEventListener("click", function (e) {
+            e.preventDefault(); // Prevent Bootstrap from switching tabs
+            // Force reload with current location parameter
+            window.location.href = "/weather/dashboard?useLocation=true";
+        });
+    });
+</script>
+
 </body>
 </html>
